@@ -6,67 +6,156 @@
   <title>AnonPoll — Secure Anonymous Polling</title>
   <meta name="description" content="Create and participate in secure, anonymous polls. One person, one vote — zero traceability.">
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.css">
 </head>
 <body>
+  
+  <!-- Cinematic Preloader -->
+  <div id="preloader">
+    <div id="preloader-text"></div>
+    <div id="preloader-icon">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Background Orbs -->
   <div class="bg-orbs">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
   </div>
 
-  <div class="page-center">
-    <div class="glass-card" style="width: 420px; max-width: 100%;">
-      <!-- Login Form -->
-      <div id="loginView">
-        <h1 style="font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 6px;">Welcome Back</h1>
-        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 32px;">Sign in to your anonymous polling account</p>
+  <div class="app-container">
+    <nav class="navbar">
+      <div class="nav-brand">Anon<span>Poll</span></div>
+    </nav>
 
-        <form id="loginForm">
-          <div class="form-group">
-            <label for="loginEmail">Email</label>
-            <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" required autocomplete="email">
-          </div>
-          <div class="form-group">
-            <label for="loginPassword">Password</label>
-            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required autocomplete="current-password">
-          </div>
-          <button type="submit" class="btn btn-primary btn-full" id="loginBtn" style="padding: 14px; font-size: 15px;">Sign In</button>
-        </form>
-
-        <p style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted);">
-          Don't have an account? <a href="#" id="showRegister">Sign up</a>
-        </p>
+    <!-- SECTION 1: HERO -->
+    <section class="section-hero" id="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Secure, Anonymous<br><span>Polling Reimagined.</span></h1>
+        <p class="hero-subtitle">The core challenge of digital hackathons is ensuring "one person, one vote" without ever storing who voted for what. We built an obsidian vault for your data—zero traceability, absolute integrity.</p>
+        <div class="scroll-indicator">
+          <span>Scroll to Decrypt</span>
+          <div class="scroll-line"></div>
+        </div>
       </div>
+    </section>
 
-      <!-- Register Form -->
-      <div id="registerView" class="hidden">
-        <h1 style="font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 6px;">Create Account</h1>
-        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 32px;">Join the secure anonymous polling platform</p>
-
-        <form id="registerForm">
-          <div class="form-group">
-            <label for="regEmail">Email</label>
-            <input type="email" id="regEmail" class="form-input" placeholder="you@example.com" required autocomplete="email">
-          </div>
-          <div class="form-group">
-            <label for="regPassword">Password</label>
-            <input type="password" id="regPassword" class="form-input" placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password">
-          </div>
-          <div class="form-group">
-            <label for="regConfirm">Confirm Password</label>
-            <input type="password" id="regConfirm" class="form-input" placeholder="Re-enter password" required minlength="6" autocomplete="new-password">
-          </div>
-          <button type="submit" class="btn btn-primary btn-full" id="registerBtn" style="padding: 14px; font-size: 15px;">Create Account</button>
-        </form>
-
-        <p style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted);">
-          Already have an account? <a href="#" id="showLogin">Sign in</a>
-        </p>
+    <!-- SECTION 2: SCROLL TYPO -->
+    <section class="section-typo" id="typoSection">
+      <div class="typo-container">
+        <div class="typo-line">
+          <div class="typo-mask"><h2 class="typo-text text-1">ZERO</h2></div>
+        </div>
+        <div class="typo-line">
+          <div class="typo-mask"><h2 class="typo-text text-2">TRACEABILITY.</h2></div>
+        </div>
+        <div class="typo-line">
+          <div class="typo-mask"><h2 class="typo-text text-3 outline-text">ABSOLUTE</h2></div>
+        </div>
+        <div class="typo-line">
+          <div class="typo-mask"><h2 class="typo-text text-4">ANONYMITY.</h2></div>
+        </div>
       </div>
-    </div>
+    </section>
+
+    <!-- SECTION 3: FEATURES BENTO -->
+    <section class="section-features" id="features">
+      <div class="bento-grid">
+        <div class="bento-card card-1 glass-card">
+          <div class="bento-icon">🔒</div>
+          <h3>Cryptographic Hashes</h3>
+          <p>Your identity is irreversibly masked using advanced salting and hashing before it ever hits the database.</p>
+        </div>
+        <div class="bento-card card-2 glass-card">
+          <div class="bento-icon">⚡</div>
+          <h3>Real-time Sockets</h3>
+          <p>Watch poll results update live across all connected clients with zero latency using WebSockets.</p>
+        </div>
+        <div class="bento-card card-3 glass-card">
+          <div class="bento-icon">🛡️</div>
+          <h3>Vote Integrity</h3>
+          <p>Our strict "one person, one vote" protocol prevents duplication while maintaining complete voter secrecy.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4: AUTHENTICATION -->
+    <section class="section-auth" id="auth">
+      <div class="landing-auth-wrapper">
+        <div class="glass-card">
+          
+          <!-- Login Form -->
+          <div id="loginView">
+            <div class="auth-header">
+              <h2>Welcome Back</h2>
+              <p>Authenticate to access the vault</p>
+            </div>
+
+            <form id="loginForm">
+              <div class="form-group">
+                <label for="loginEmail">Identity Hash (Email)</label>
+                <input type="email" id="loginEmail" class="form-input" placeholder="agent@network.com" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="loginPassword">Access Key</label>
+                <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+              </div>
+              <button type="submit" class="btn btn-primary btn-full" id="loginBtn">Decrypt & Enter</button>
+            </form>
+
+            <div class="auth-switch">
+              New node in the network? <a href="#" id="showRegister">Initialize</a>
+            </div>
+          </div>
+
+          <!-- Register Form -->
+          <div id="registerView" class="hidden">
+            <div class="auth-header">
+              <h2>Initialize Node</h2>
+              <p>Join the zero-knowledge network</p>
+            </div>
+
+            <form id="registerForm">
+              <div class="form-group">
+                <label for="regEmail">Identity Hash (Email)</label>
+                <input type="email" id="regEmail" class="form-input" placeholder="agent@network.com" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="regPassword">Access Key</label>
+                <input type="password" id="regPassword" class="form-input" placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password">
+              </div>
+              <div class="form-group">
+                <label for="regConfirm">Verify Key</label>
+                <input type="password" id="regConfirm" class="form-input" placeholder="Re-enter access key" required minlength="6" autocomplete="new-password">
+              </div>
+              <button type="submit" class="btn btn-primary btn-full" id="registerBtn">Generate Identity</button>
+            </form>
+
+            <div class="auth-switch">
+              Already initialized? <a href="#" id="showLogin">Enter Vault</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="toast-container" id="toastContainer"></div>
+
+  <!-- GSAP Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+  
+  <!-- Lenis & SplitType -->
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://unpkg.com/split-type"></script>
+
+  <script src="js/animation.js"></script>
   <script src="js/auth.js"></script>
 </body>
 </html>
