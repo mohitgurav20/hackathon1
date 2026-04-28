@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vote — AnonPoll</title>
+  <meta name="description" content="Cast your anonymous vote. Your identity is never linked to your choice.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="nav-brand">🗳️ <span>AnonPoll</span></div>
+      <div class="nav-links">
+        <span class="nav-user" id="navUser"></span>
+        <a href="dashboard.html" class="btn btn-secondary btn-sm">Dashboard</a>
+        <button class="btn btn-secondary btn-sm" id="logoutBtn">Logout</button>
+      </div>
+    </nav>
+
+    <div class="page-content" style="max-width: 680px;">
+      <!-- Loading state -->
+      <div id="loadingState" class="text-center" style="padding: 60px 0;">
+        <div style="font-size: 36px; margin-bottom: 12px;">⏳</div>
+        <p class="text-muted">Loading poll...</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="errorState" class="hidden">
+        <div class="glass-card text-center">
+          <div style="font-size: 48px; margin-bottom: 12px;">😕</div>
+          <h2 style="font-size: 20px; margin-bottom: 8px;">Poll Not Found</h2>
+          <p class="text-muted mb-16" id="errorMessage">This poll doesn't exist or has been removed.</p>
+          <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+      </div>
+
+      <!-- Already voted state -->
+      <div id="votedState" class="hidden">
+        <div class="glass-card text-center">
+          <div style="font-size: 48px; margin-bottom: 12px;">✅</div>
+          <h2 style="font-size: 20px; margin-bottom: 8px;">You Already Voted!</h2>
+          <p class="text-muted mb-16">Your anonymous vote has been recorded. You can only vote once per poll.</p>
+          <a href="#" class="btn btn-primary" id="viewResultsAfterVoted">View Results →</a>
+        </div>
+      </div>
+
+      <!-- Voting interface -->
+      <div id="voteState" class="hidden">
+        <div class="glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <h1 style="font-size: 24px; font-weight: 700;" id="pollTitle"></h1>
+            <div class="timer hidden" id="pollTimer">
+              <span class="timer-dot"></span>
+              <span id="timerText"></span>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 8px;" id="pollDesc"></p>
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 24px;">🔒 Your vote is completely anonymous and cannot be traced back to you.</p>
+
+          <div class="vote-options" id="voteOptions">
+            <!-- Options rendered by JS -->
+          </div>
+
+          <button class="btn btn-primary btn-full" id="submitVoteBtn" disabled style="padding: 15px; font-size: 15px; margin-top: 8px;">
+            Cast Anonymous Vote
+          </button>
+        </div>
+      </div>
+
+      <!-- Vote success -->
+      <div id="successState" class="hidden">
+        <div class="glass-card text-center">
+          <div style="font-size: 48px; margin-bottom: 12px;">🎉</div>
+          <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 8px;">Vote Submitted!</h2>
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;">
+            Your anonymous vote has been securely recorded.
+            <br>It can never be linked back to your identity.
+          </p>
+          <a href="#" class="btn btn-primary" id="viewResultsBtn">View Live Results →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login prompt for unauthenticated users -->
+  <div class="modal-overlay hidden" id="loginPrompt">
+    <div class="modal-card glass-card text-center">
+      <div style="font-size: 48px; margin-bottom: 12px;">🔐</div>
+      <h2 style="font-size: 20px; margin-bottom: 8px;">Login Required</h2>
+      <p class="text-muted mb-16">You need to sign in to cast your anonymous vote. Don't worry — your vote remains untraceable.</p>
+      <a href="index.html" class="btn btn-primary btn-full">Sign In to Vote</a>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="js/vote.js"></script>
+</body>
+</html>

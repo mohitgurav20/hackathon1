@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AnonPoll — Secure Anonymous Polling</title>
+  <meta name="description" content="Create and participate in secure, anonymous polls. One person, one vote — zero traceability.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="page-center">
+    <div class="glass-card" style="width: 420px; max-width: 100%;">
+      <!-- Login Form -->
+      <div id="loginView">
+        <h1 style="font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 6px;">Welcome Back</h1>
+        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 32px;">Sign in to your anonymous polling account</p>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" class="form-input" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" id="loginBtn" style="padding: 14px; font-size: 15px;">Sign In</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted);">
+          Don't have an account? <a href="#" id="showRegister">Sign up</a>
+        </p>
+      </div>
+
+      <!-- Register Form -->
+      <div id="registerView" class="hidden">
+        <h1 style="font-size: 28px; font-weight: 700; text-align: center; margin-bottom: 6px;">Create Account</h1>
+        <p style="text-align: center; color: var(--text-muted); font-size: 14px; margin-bottom: 32px;">Join the secure anonymous polling platform</p>
+
+        <form id="registerForm">
+          <div class="form-group">
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" class="form-input" placeholder="you@example.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" class="form-input" placeholder="Min. 6 characters" required minlength="6" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label for="regConfirm">Confirm Password</label>
+            <input type="password" id="regConfirm" class="form-input" placeholder="Re-enter password" required minlength="6" autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" id="registerBtn" style="padding: 14px; font-size: 15px;">Create Account</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 24px; font-size: 14px; color: var(--text-muted);">
+          Already have an account? <a href="#" id="showLogin">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="js/auth.js"></script>
+</body>
+</html>

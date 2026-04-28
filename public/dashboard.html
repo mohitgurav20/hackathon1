@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — AnonPoll</title>
+  <meta name="description" content="Manage your anonymous polls and create new ones.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="nav-brand">🗳️ <span>AnonPoll</span></div>
+      <div class="nav-links">
+        <span class="nav-user" id="navUser"></span>
+        <a href="dashboard.html" class="btn btn-secondary btn-sm">Dashboard</a>
+        <button class="btn btn-secondary btn-sm" id="logoutBtn">Logout</button>
+      </div>
+    </nav>
+
+    <div class="page-content">
+      <!-- Header -->
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Your Polls</h1>
+          <p class="section-subtitle">Create and manage anonymous polls</p>
+        </div>
+        <button class="btn btn-primary" id="openCreateModal">✚ Create Poll</button>
+      </div>
+
+      <!-- Poll Cards Grid -->
+      <div class="cards-grid" id="pollsGrid">
+        <!-- Polls rendered by JS -->
+      </div>
+
+      <!-- Empty state -->
+      <div class="empty-state hidden" id="emptyState">
+        <div class="empty-icon">📊</div>
+        <div class="empty-title">No polls yet</div>
+        <div class="empty-desc">Create your first anonymous poll to get started!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Poll Modal -->
+  <div class="modal-overlay hidden" id="createModal">
+    <div class="modal-card glass-card">
+      <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 4px;">Create New Poll</h2>
+      <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 24px;">Votes are fully anonymous — no one can trace who voted what.</p>
+
+      <form id="createPollForm">
+        <div class="form-group">
+          <label for="pollTitle">Poll Question</label>
+          <input type="text" id="pollTitle" class="form-input" placeholder="What should we name the mascot?" required maxlength="200">
+        </div>
+
+        <div class="form-group">
+          <label for="pollDesc">Description <span class="text-muted">(optional)</span></label>
+          <textarea id="pollDesc" class="form-input" placeholder="Add context about this poll..." maxlength="500"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Options</label>
+          <div id="optionsContainer">
+            <div class="input-row mb-16">
+              <input type="text" class="form-input option-input" placeholder="Option 1" required maxlength="100">
+              <button type="button" class="btn btn-icon btn-secondary remove-option-btn hidden" title="Remove">✕</button>
+            </div>
+            <div class="input-row mb-16">
+              <input type="text" class="form-input option-input" placeholder="Option 2" required maxlength="100">
+              <button type="button" class="btn btn-icon btn-secondary remove-option-btn hidden" title="Remove">✕</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm mt-8" id="addOptionBtn">+ Add Option</button>
+        </div>
+
+        <div class="form-group">
+          <label for="pollExpiry">Auto-close after <span class="text-muted">(optional)</span></label>
+          <select id="pollExpiry" class="form-input">
+            <option value="0">No expiry</option>
+            <option value="30">30 minutes</option>
+            <option value="60">1 hour</option>
+            <option value="360">6 hours</option>
+            <option value="1440">24 hours</option>
+            <option value="4320">3 days</option>
+            <option value="10080">7 days</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 28px;">
+          <button type="button" class="btn btn-secondary" id="cancelCreate" style="flex:1;">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="submitPoll" style="flex:2;">Create Poll</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Share Code Modal -->
+  <div class="modal-overlay hidden" id="shareModal">
+    <div class="modal-card glass-card text-center">
+      <div style="font-size: 48px; margin-bottom: 12px;">🎉</div>
+      <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 6px;">Poll Created!</h2>
+      <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 20px;">Share this code or link for people to vote anonymously.</p>
+
+      <div class="share-box">
+        <span class="share-code" id="shareCodeText"></span>
+        <button class="btn btn-secondary btn-sm" id="copyCodeBtn">📋 Copy</button>
+      </div>
+
+      <div class="share-box">
+        <span class="share-code" id="shareLinkText" style="font-size: 12px; letter-spacing: 0;"></span>
+        <button class="btn btn-secondary btn-sm" id="copyLinkBtn">📋 Copy</button>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 24px;">
+        <a href="#" class="btn btn-secondary" id="shareViewResults" style="flex:1;">View Results</a>
+        <button class="btn btn-primary" id="closeShareModal" style="flex:1;">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

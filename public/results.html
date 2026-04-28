@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Results — AnonPoll</title>
+  <meta name="description" content="Watch live anonymous poll results update in real-time.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="nav-brand">🗳️ <span>AnonPoll</span></div>
+      <div class="nav-links">
+        <a href="dashboard.html" class="btn btn-secondary btn-sm">Dashboard</a>
+        <button class="btn btn-secondary btn-sm" id="logoutBtn">Logout</button>
+      </div>
+    </nav>
+
+    <div class="page-content" style="max-width: 750px;">
+      <!-- Loading -->
+      <div id="loadingState" class="text-center" style="padding: 60px 0;">
+        <div style="font-size: 36px; margin-bottom: 12px;">⏳</div>
+        <p class="text-muted">Loading results...</p>
+      </div>
+
+      <!-- Error -->
+      <div id="errorState" class="hidden">
+        <div class="glass-card text-center">
+          <div style="font-size: 48px; margin-bottom: 12px;">😕</div>
+          <h2 style="font-size: 20px; margin-bottom: 8px;">Results Not Found</h2>
+          <p class="text-muted mb-16" id="errorMessage">Could not load poll results.</p>
+          <a href="dashboard.html" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+      </div>
+
+      <!-- Results -->
+      <div id="resultsState" class="hidden">
+        <div class="glass-card">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 8px;">
+            <h1 style="font-size: 24px; font-weight: 700;" id="pollTitle"></h1>
+            <div class="timer hidden" id="pollTimer">
+              <span class="timer-dot"></span>
+              <span id="timerText"></span>
+            </div>
+          </div>
+          <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;" id="pollDesc"></p>
+
+          <!-- Stats -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-value" id="totalVotes">0</div>
+              <div class="stat-label">Total Votes</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="optionCount">0</div>
+              <div class="stat-label">Options</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value" id="leadingPct">0%</div>
+              <div class="stat-label">Leading</div>
+            </div>
+          </div>
+
+          <!-- Live indicator -->
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 20px;">
+            <span class="timer-dot" style="background: var(--success);"></span>
+            <span style="font-size: 13px; color: var(--success); font-weight: 600;">LIVE — Updates in real-time</span>
+          </div>
+
+          <!-- Results bars -->
+          <div class="results-list" id="resultsList">
+            <!-- Rendered by JS -->
+          </div>
+
+          <!-- Share section -->
+          <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--glass-border);">
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Share this poll:</p>
+            <div class="share-box">
+              <span class="share-code" id="shareCode" style="font-size: 16px;"></span>
+              <button class="btn btn-secondary btn-sm" id="copyShareBtn">📋 Copy Link</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="js/results.js"></script>
+</body>
+</html>
