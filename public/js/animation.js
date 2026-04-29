@@ -39,12 +39,12 @@ document.addEventListener('DOMContentLoaded', () => {
   
   preloaderTl.to("#preloader-text", {
     duration: 0.5, opacity: 1,
-    text: "0x7F4B2... INITIALIZING SECURE VAULT ...0x9A1C",
+    text: "0x7F4B2... INITIALIZING AUCTION VAULT ...0x9A1C",
     ease: "power2.inOut"
   })
   .to({}, { duration: 0.5 })
   .to("#preloader-text", {
-    duration: 1.2, text: "Zero Traceability. Absolute Anonymity.", ease: "none"
+    duration: 1.2, text: "Privacy-First. Decentralized. Unstoppable.", ease: "none"
   })
   .to({}, { duration: 0.6 })
   .to("#preloader-text", { duration: 0.3, opacity: 0, y: -20, ease: "power2.in" })

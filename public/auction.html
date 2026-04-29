@@ -1,95 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Decentralized Sealed-Bid Auction</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <style>
-        .auction-container { max-width: 800px; margin: 40px auto; padding: 20px; }
-        .card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
-        .hidden { display: none; }
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; color: #aaa; }
-        input[type="text"], input[type="number"], input[type="password"] { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #444; background: #222; color: #fff; margin-bottom: 10px; }
-        .btn-wallet { background: #f6851b; color: #fff; font-weight: bold; }
-        .btn-wallet:hover { background: #e2761b; }
-        .status-badge { display: inline-block; padding: 5px 10px; border-radius: 12px; background: #333; font-size: 14px; margin-left: 10px; }
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        h2 { margin-top: 0; color: #fff; border-bottom: 1px solid #444; padding-bottom: 10px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sealed Vault — Bid Interface</title>
+  <meta name="description" content="Secure decentralized bidding interface.">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.css">
+  <style>
+    /* Additional dashboard-specific tweaks */
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 40px 60px;
+      position: relative;
+      z-index: 1;
+    }
+    .status-badge {
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 0 20px rgba(255,255,255,0.05);
+    }
+    .status-active { background: rgba(255,255,255,0.1); color: #fff; border-color: #fff; }
+    .status-pending { background: rgba(245, 158, 11, 0.1); color: var(--warning); border-color: var(--warning); }
+    .status-success { background: rgba(255, 255, 255, 0.1); color: #fff; border-color: #fff; }
+    .status-danger { background: rgba(255, 51, 51, 0.1); color: var(--danger); border-color: var(--danger); }
+
+    .bento-card { opacity: 1 !important; }
+    
+    .stat-label { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: 600; }
+    .stat-value { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -0.5px; word-break: break-all; }
+    
+    .auction-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .full-width { grid-column: 1 / -1; }
+    
+    .phase-indicator {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+    
+    .form-header { margin-bottom: 24px; }
+    .form-header h2 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+    .form-header p { font-size: 14px; color: var(--text-secondary); }
+
+    @media (max-width: 800px) {
+      .auction-grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
-<body style="background: #111; color: #eee; font-family: sans-serif;">
-    <div class="auction-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h1>Sealed-Bid Auction</h1>
-            <button id="connectWalletBtn" class="btn btn-wallet" style="padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Connect MetaMask</button>
-        </div>
+<body>
+  
+  <div class="bg-orbs"></div>
+  <div class="ambient-glow"></div>
 
-        <div id="dashboard" class="dashboard-grid">
-            <div class="card">
-                <h2>Auction Info</h2>
-                <p><strong>Contract:</strong> <span id="contractAddress">Not Connected</span></p>
-                <p><strong>Status:</strong> <span id="auctionStatus" class="status-badge">Unknown</span></p>
-                <p><strong>Bidding Ends:</strong> <span id="biddingEnd">...</span></p>
-                <p><strong>Reveal Ends:</strong> <span id="revealEnd">...</span></p>
-            </div>
-            <div class="card">
-                <h2>Highest Bid</h2>
-                <p><strong>Winner:</strong> <span id="highestBidder">...</span></p>
-                <p><strong>Amount:</strong> <span id="highestBid">...</span> ETH</p>
-            </div>
-        </div>
+  <nav class="navbar">
+    <div class="nav-brand">Sealed<span>Vault</span></div>
+    <div class="nav-links">
+      <button id="connectWalletBtn" class="btn btn-primary" style="padding: 10px 20px; font-size: 14px;">Connect MetaMask</button>
+      <button id="logoutBtn" class="btn btn-secondary btn-sm" style="background: transparent; border: 1px solid var(--glass-border); color: #fff; padding: 10px 20px; font-size: 14px; margin-left: 10px; border-radius: var(--radius-sm);">Exit Vault</button>
+    </div>
+  </nav>
 
-        <div class="card">
-            <h2>Phase 1: Commit Bid (Private)</h2>
-            <p style="font-size: 14px; color: #aaa;">Your bid and secret are hashed locally. Only the hash is sent to the blockchain.</p>
-            <form id="commitForm">
-                <div class="form-group">
-                    <label>Actual Bid Amount (ETH)</label>
-                    <input type="number" id="bidAmount" step="0.0001" required>
-                </div>
-                <div class="form-group">
-                    <label>Secret Word (Used to reveal later)</label>
-                    <input type="password" id="bidSecret" required>
-                </div>
-                <div class="form-group">
-                    <label>Deposit Amount (ETH) <small>(Must be >= bid, excess is refunded)</small></label>
-                    <input type="number" id="depositAmount" step="0.0001" required>
-                </div>
-                <div class="form-group" style="display:none;">
-                    <label>Fake Bid?</label>
-                    <input type="checkbox" id="isFake"> (Check to submit a decoy bid)
-                </div>
-                <button type="submit" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; background: #007bff; color: #fff;">Submit Blind Bid</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h2>Phase 2: Reveal Bid</h2>
-            <p style="font-size: 14px; color: #aaa;">Reveal your bid to claim refunds and compete for the item.</p>
-            <form id="revealForm">
-                <div class="form-group">
-                    <label>Actual Bid Amount (ETH)</label>
-                    <input type="number" id="revealAmount" step="0.0001" required>
-                </div>
-                <div class="form-group">
-                    <label>Secret Word</label>
-                    <input type="password" id="revealSecret" required>
-                </div>
-                <button type="submit" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; background: #28a745; color: #fff;">Reveal Bid</button>
-            </form>
-        </div>
-
-        <div class="card">
-            <h2>Withdraw Refunds</h2>
-            <p style="font-size: 14px; color: #aaa;">If you were outbid, click here to withdraw your deposit.</p>
-            <button id="withdrawBtn" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; background: #dc3545; color: #fff;">Withdraw</button>
-        </div>
+  <main class="dashboard-container">
+    
+    <div class="phase-indicator">
+      <h1 class="hero-title" style="font-size: 48px; margin-bottom: 0;">Auction <span>Control</span></h1>
+      <span id="auctionStatus" class="status-badge status-pending">Syncing...</span>
     </div>
 
-    <!-- ethers.js library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
-    <script src="js/auction.js"></script>
+    <div class="auction-grid">
+      
+      <!-- Contract Info -->
+      <div class="bento-card glass-card">
+        <div class="stat-label">Smart Contract</div>
+        <div id="contractAddress" class="stat-value" style="font-size: 16px; font-family: 'Space Mono', monospace; opacity: 0.7;">Disconnected</div>
+        <div style="margin-top: 20px; display: flex; gap: 20px;">
+          <div>
+            <div class="stat-label">Bidding Ends</div>
+            <div id="biddingEnd" style="font-weight: 700;">--:--</div>
+          </div>
+          <div>
+            <div class="stat-label">Reveal Ends</div>
+            <div id="revealEnd" style="font-weight: 700;">--:--</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Highest Bid -->
+      <div class="bento-card glass-card">
+        <div class="stat-label">Current High Bid</div>
+        <div id="highestBid" class="stat-value">0.0000 <span style="font-size: 14px; font-weight: 400; color: var(--text-secondary);">ETH</span></div>
+        <div style="margin-top: 20px;">
+          <div class="stat-label">Leading Address</div>
+          <div id="highestBidder" style="font-family: 'Space Mono', monospace; font-size: 14px; opacity: 0.7;">No active bids</div>
+        </div>
+      </div>
+
+      <!-- Phase 1: Commit -->
+      <div class="bento-card glass-card" id="commitSection">
+        <div class="form-header">
+          <h2>Phase 1: Commit Bid</h2>
+          <p>Encrypt and submit your blind bid to the blockchain.</p>
+        </div>
+        <form id="commitForm" style="padding: 0;">
+          <div class="form-group">
+            <label>Actual Bid (ETH)</label>
+            <input type="number" id="bidAmount" class="form-input" step="0.0001" placeholder="e.g. 0.05" required>
+          </div>
+          <div class="form-group">
+            <label>Secret Key</label>
+            <input type="password" id="bidSecret" class="form-input" placeholder="Your unique password" required>
+          </div>
+          <div class="form-group">
+            <label>Deposit (ETH)</label>
+            <input type="number" id="depositAmount" class="form-input" step="0.0001" placeholder="e.g. 0.1" required>
+          </div>
+          <div class="form-group" style="display: flex; align-items: center; gap: 12px; margin-top: 10px;">
+            <input type="checkbox" id="isFake" style="width: 20px; height: 20px; cursor: pointer;">
+            <label for="isFake" style="margin-bottom: 0; cursor: pointer; opacity: 0.8;">Is this a fake bid? (Honeypot)</label>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" style="margin-top: 20px;">Submit Blind Bid</button>
+        </form>
+      </div>
+
+      <!-- Phase 2: Reveal -->
+      <div class="bento-card glass-card" id="revealSection">
+        <div class="form-header">
+          <h2>Phase 2: Reveal Bid</h2>
+          <p>Decrypt your bid to claim refunds and compete.</p>
+        </div>
+        <form id="revealForm" style="padding: 0;">
+          <div class="form-group">
+            <label>Actual Bid (ETH)</label>
+            <input type="number" id="revealAmount" class="form-input" step="0.0001" placeholder="Must match Phase 1" required>
+          </div>
+          <div class="form-group">
+            <label>Secret Key</label>
+            <input type="password" id="revealSecret" class="form-input" placeholder="Must match Phase 1" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full" style="background: var(--accent); color: var(--bg-primary);">Verify & Reveal</button>
+        </form>
+      </div>
+
+      <!-- Withdrawal -->
+      <div class="bento-card glass-card full-width">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h2 style="font-size: 24px; font-weight: 700;">Refund Processing</h2>
+            <p style="font-size: 14px; color: var(--text-secondary);">Reclaim your ETH if you were outbid or have revealed excess deposits.</p>
+          </div>
+          <button id="withdrawBtn" class="btn btn-primary" style="background: transparent; border: 1px solid var(--danger); color: var(--danger);">Initialize Withdrawal</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  
+  <script src="js/auction.js"></script>
+  <script>
+    // Simple UI transitions
+    document.addEventListener('DOMContentLoaded', () => {
+      const lenis = new Lenis();
+      function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+      requestAnimationFrame(raf);
+
+      gsap.fromTo(".bento-card", 
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out", delay: 0.2 }
+      );
+      
+      gsap.from(".phase-indicator", {
+        x: -20,
+        opacity: 0,
+        duration: 1,
+        ease: "power4.out"
+      });
+
+      // Handle logout
+      document.getElementById('logoutBtn')?.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = 'index.html';
+      });
+    });
+  </script>
 </body>
 </html>
