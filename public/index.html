@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AnonPoll — Secure Anonymous Polling</title>
-  <meta name="description" content="Create and participate in secure, anonymous polls. One person, one vote — zero traceability.">
+  <title>Sealed Auction — Decentralized Bidding</title>
+  <meta name="description" content="Decentralized sealed-bid auction system using cryptographic commitments.">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.css">
 </head>
@@ -29,14 +29,14 @@
 
   <div class="app-container">
     <nav class="navbar">
-      <div class="nav-brand">Anon<span>Poll</span></div>
+      <div class="nav-brand">Sealed<span>Auction</span></div>
     </nav>
 
     <!-- SECTION 1: HERO -->
     <section class="section-hero" id="hero">
       <div class="hero-content">
-        <h1 class="hero-title">Secure, Anonymous<br><span>Polling Reimagined.</span></h1>
-        <p class="hero-subtitle">The core challenge of digital hackathons is ensuring "one person, one vote" without ever storing who voted for what. We built an obsidian vault for your data—zero traceability, absolute integrity.</p>
+        <h1 class="hero-title">Decentralized, Private<br><span>Bidding Reimagined.</span></h1>
+        <p class="hero-subtitle">The core challenge of digital auctions is preventing front-running and ensuring true fairness. We built a cryptographic commit-reveal vault for your bids—zero traceability until the reveal phase.</p>
         <div class="scroll-indicator">
           <span>Scroll to Decrypt</span>
           <div class="scroll-line"></div>
@@ -68,17 +68,17 @@
         <div class="bento-card card-1 glass-card">
           <div class="bento-icon">🔒</div>
           <h3>Cryptographic Hashes</h3>
-          <p>Your identity is irreversibly masked using advanced salting and hashing before it ever hits the database.</p>
+          <p>Your bid is irreversibly masked using advanced hashing during the commit phase, ensuring front-running is impossible.</p>
         </div>
         <div class="bento-card card-2 glass-card">
           <div class="bento-icon">⚡</div>
-          <h3>Real-time Sockets</h3>
-          <p>Watch poll results update live across all connected clients with zero latency using WebSockets.</p>
+          <h3>Smart Contracts</h3>
+          <p>Watch auction results update automatically governed by strict time-based phases via Solidity smart contracts.</p>
         </div>
         <div class="bento-card card-3 glass-card">
           <div class="bento-icon">🛡️</div>
-          <h3>Vote Integrity</h3>
-          <p>Our strict "one person, one vote" protocol prevents duplication while maintaining complete voter secrecy.</p>
+          <h3>Secure Withdrawals</h3>
+          <p>Losing bids can be securely withdrawn at any time. Our "pull over push" mechanism protects against re-entrancy.</p>
         </div>
       </div>
     </section>

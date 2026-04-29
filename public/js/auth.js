@@ -8,7 +8,7 @@ const API = window.location.origin + '/api';
 (function checkAuth() {
   const token = localStorage.getItem('token');
   if (token) {
-    window.location.href = 'dashboard.html';
+    window.location.href = 'auction.html';
   }
 })();
 
@@ -56,7 +56,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     showToast('Login successful!', 'success');
 
     setTimeout(() => {
-      window.location.href = 'dashboard.html';
+      window.location.href = 'auction.html';
     }, 500);
 
   } catch (err) {
@@ -103,7 +103,7 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
     showToast('Account created!', 'success');
 
     setTimeout(() => {
-      window.location.href = 'dashboard.html';
+      window.location.href = 'auction.html';
     }, 500);
 
   } catch (err) {
