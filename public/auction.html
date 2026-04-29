@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decentralized Sealed-Bid Auction</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .auction-container { max-width: 800px; margin: 40px auto; padding: 20px; }
+        .card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.1); }
+        .hidden { display: none; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #aaa; }
+        input[type="text"], input[type="number"], input[type="password"] { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #444; background: #222; color: #fff; margin-bottom: 10px; }
+        .btn-wallet { background: #f6851b; color: #fff; font-weight: bold; }
+        .btn-wallet:hover { background: #e2761b; }
+        .status-badge { display: inline-block; padding: 5px 10px; border-radius: 12px; background: #333; font-size: 14px; margin-left: 10px; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        h2 { margin-top: 0; color: #fff; border-bottom: 1px solid #444; padding-bottom: 10px; }
+    </style>
+</head>
+<body style="background: #111; color: #eee; font-family: sans-serif;">
+    <div class="auction-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1>Sealed-Bid Auction</h1>
+            <button id="connectWalletBtn" class="btn btn-wallet" style="padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer;">Connect MetaMask</button>
+        </div>
+
+        <div id="dashboard" class="dashboard-grid">
+            <div class="card">
+                <h2>Auction Info</h2>
+                <p><strong>Contract:</strong> <span id="contractAddress">Not Connected</span></p>
+                <p><strong>Status:</strong> <span id="auctionStatus" class="status-badge">Unknown</span></p>
+                <p><strong>Bidding Ends:</strong> <span id="biddingEnd">...</span></p>
+                <p><strong>Reveal Ends:</strong> <span id="revealEnd">...</span></p>
+            </div>
+            <div class="card">
+                <h2>Highest Bid</h2>
+                <p><strong>Winner:</strong> <span id="highestBidder">...</span></p>
+                <p><strong>Amount:</strong> <span id="highestBid">...</span> ETH</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Phase 1: Commit Bid (Private)</h2>
+            <p style="font-size: 14px; color: #aaa;">Your bid and secret are hashed locally. Only the hash is sent to the blockchain.</p>
+            <form id="commitForm">
+                <div class="form-group">
+                    <label>Actual Bid Amount (ETH)</label>
+                    <input type="number" id="bidAmount" step="0.0001" required>
+                </div>
+                <div class="form-group">
+                    <label>Secret Word (Used to reveal later)</label>
+                    <input type="password" id="bidSecret" required>
+                </div>
+                <div class="form-group">
+                    <label>Deposit Amount (ETH) <small>(Must be >= bid, excess is refunded)</small></label>
+                    <input type="number" id="depositAmount" step="0.0001" required>
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label>Fake Bid?</label>
+                    <input type="checkbox" id="isFake"> (Check to submit a decoy bid)
+                </div>
+                <button type="submit" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; background: #007bff; color: #fff;">Submit Blind Bid</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Phase 2: Reveal Bid</h2>
+            <p style="font-size: 14px; color: #aaa;">Reveal your bid to claim refunds and compete for the item.</p>
+            <form id="revealForm">
+                <div class="form-group">
+                    <label>Actual Bid Amount (ETH)</label>
+                    <input type="number" id="revealAmount" step="0.0001" required>
+                </div>
+                <div class="form-group">
+                    <label>Secret Word</label>
+                    <input type="password" id="revealSecret" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; background: #28a745; color: #fff;">Reveal Bid</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Withdraw Refunds</h2>
+            <p style="font-size: 14px; color: #aaa;">If you were outbid, click here to withdraw your deposit.</p>
+            <button id="withdrawBtn" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; background: #dc3545; color: #fff;">Withdraw</button>
+        </div>
+    </div>
+
+    <!-- ethers.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
+    <script src="js/auction.js"></script>
+</body>
+</html>
